@@ -1,4 +1,4 @@
-from langchain_community.document_loaders import PyPDFLoader
+from langchain_community.document_loaders import PyPDFLoader, CSVLoader
 
 class DocumentLoader:
     
@@ -6,6 +6,8 @@ class DocumentLoader:
         self.type = file_type
         if self.type.lower() == "pdf":
             self.loader = PyPDFLoader(file_path=file_path)
+        if self.type.lower() == "csv":
+            self.loader = CSVLoader(file_path=file_path)
         else:
             raise Exception(f"File type {file_type} not supported")
         
