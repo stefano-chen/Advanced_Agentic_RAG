@@ -9,10 +9,8 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 load_dotenv("./.env")
-    
 
 if __name__ == "__main__":
-    
     with open("./config/populate_config.json", "r") as f:
         config = json.load(f)
 
