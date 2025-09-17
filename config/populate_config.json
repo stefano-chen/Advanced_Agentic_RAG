@@ -3,6 +3,7 @@
     "save_dir_path": "./store",
     "embedding_provider": "huggingface",
     "embedding_model": "sentence-transformers/all-mpnet-base-v2",
+    "embedding_host": "",
     "chunking_strategy": "window",
     "chunking_options": {
         "chunk_size": 1000,

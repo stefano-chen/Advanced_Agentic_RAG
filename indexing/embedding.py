@@ -4,13 +4,13 @@ from langchain_ollama import OllamaEmbeddings
 
 class EmbeddingModel:
 
-    def __init__(self, embedding_provider: str, embedding_model: str):
+    def __init__(self, embedding_provider: str, embedding_model: str, embedding_host: str= None):
         if embedding_provider == "huggingface":
             self.embedding_model = HuggingFaceEmbeddings(model_name=embedding_model)
         elif embedding_provider == "openai":
-            self.embedding_model = OpenAIEmbeddings(model=embedding_model)
+            self.embedding_model = OpenAIEmbeddings(model=embedding_model, base_url=embedding_host)
         elif embedding_provider == "ollama":
-            self.embedding_model = OllamaEmbeddings(model=embedding_model)
+            self.embedding_model = OllamaEmbeddings(model=embedding_model, base_url=embedding_host)
         else:
             raise Exception("Embedding model not supported")
 

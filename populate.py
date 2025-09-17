@@ -14,7 +14,7 @@ if __name__ == "__main__":
     with open("./config/populate_config.json", "r") as f:
         config = json.load(f)
 
-    embedding_model = EmbeddingModel(config["embedding_provider"], config["embedding_model"]).get()
+    embedding_model = EmbeddingModel(config["embedding_provider"], config["embedding_model"], config["embedding_host"]).get()
     
     data_dir_path = config["data_dir_path"]
     if not os.path.exists(data_dir_path):
