@@ -4,16 +4,19 @@ from langchain_huggingface.embeddings import HuggingFaceEmbeddings
 from indexing.document_loader import DocumentLoader
 from indexing.chunking import Chunking
 from indexing.vectorstore import VectorStore
+from indexing.embedding import EmbeddingModel
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv("./.env")
     
 
 if __name__ == "__main__":
     
     with open("./config/populate_config.json", "r") as f:
         config = json.load(f)
-    
-    if config["embedding_provider"] == "huggingface":
-        embedding_model = HuggingFaceEmbeddings(model_name=config["embedding_model"])
+
+    embedding_model = EmbeddingModel(config["embedding_provider"], config["embedding_model"]).get()
     
     data_dir_path = config["data_dir_path"]
     if not os.path.exists(data_dir_path):
