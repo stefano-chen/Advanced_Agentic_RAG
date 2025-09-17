@@ -28,8 +28,8 @@ class VectorStore:
         else:
             raise Exception(f"Vector store {self.store_type} is not supported")
     
-    def as_retriever(self):
-        return self.vectorstore.as_retriever()
+    def as_retriever(self, k: int):
+        return self.vectorstore.as_retriever(search_kwargs={"k": k})
 
     def add_documents(self, documents: List[Document]):
         return self.vectorstore.add_documents(documents=documents)
