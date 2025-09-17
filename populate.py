@@ -1,30 +1,10 @@
 import json
 import os
 from langchain_huggingface.embeddings import HuggingFaceEmbeddings
-from typing import List
-from langchain_core.documents import Document
-from langchain_community.document_loaders import PyPDFLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_community.vectorstores import FAISS
-from langchain_core.embeddings import Embeddings
-
-
-def load_document(type: str, data_path: str):
-    if type == "pdf":
-        loader = PyPDFLoader(data_path)
-    return loader.load()
-
-def apply_chunking(documents: List[Document], strategy: str, strategy_options: dict):
-    if strategy == "window":
-        text_splitter = RecursiveCharacterTextSplitter(
-            **strategy_options
-        )
-    return text_splitter.split_documents(documents)
-
-def create_vector_store(type: str, documents: List[Document], embedding_model: Embeddings, save_path: str):
-    if type == "faiss":
-        vector_store = FAISS.from_documents(documents, embedding_model)
-        vector_store.save_local(save_path)
+from indexing.document_loader import DocumentLoader
+from indexing.chunking import Chunking
+from indexing.vectorstore import VectorStore
+from pathlib import Path
     
 
 if __name__ == "__main__":
@@ -42,11 +22,13 @@ if __name__ == "__main__":
     for entry in os.scandir(data_dir_path):
         if entry.is_file():
             print(f"loading from {entry.path}")
-            pages = load_document(type=entry.path.split(".")[-1], data_path=entry.path)
+            pages = DocumentLoader(file_type=entry.path.split(".")[-1], file_path=entry.path).load()
             print(f"{len(pages)} pages loaded")
             print(f"Apply chunking strategy {config["chunking_strategy"]}")
-            chunks = apply_chunking(pages, config["chunking_strategy"], config["chunking_options"])
+            chunks = Chunking(config["chunking_strategy"], config["chunking_options"]).apply(pages)
             print(f"{len(chunks)} chunks extracted")
-            save_dir = os.path.join(config["save_dir_path"], entry.name.split(".")[0])
+            print(f"Creating Vector store {config["vector_store_type"]}")
+            vector_store = VectorStore(config["vector_store_type"], embedding_model, chunks)
+            save_dir = Path(config["save_dir_path"]).joinpath(entry.name.split(".")[0])
             print(f"saving vector store at {save_dir}\n")
-            create_vector_store(config["vector_store_type"], chunks, embedding_model, save_dir)
+            vector_store.save(save_dir)
