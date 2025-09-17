@@ -25,7 +25,7 @@ if __name__ == "__main__":
             pages = DocumentLoader(file_type=entry.path.split(".")[-1], file_path=entry.path).load()
             print(f"{len(pages)} pages loaded")
             print(f"Apply chunking strategy {config["chunking_strategy"]}")
-            chunks = Chunking(config["chunking_strategy"], config["chunking_options"]).apply(pages)
+            chunks = Chunking(config["chunking_strategy"], config["chunking_options"], embedding_model).apply(pages)
             print(f"{len(chunks)} chunks extracted")
             print(f"Creating Vector store {config["vector_store_type"]}")
             vector_store = VectorStore(config["vector_store_type"], embedding_model, chunks)
