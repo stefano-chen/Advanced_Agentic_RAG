@@ -1,0 +1,12 @@
+{
+    "data_dir_path": "./pdf",
+    "save_dir_path": "./store",
+    "embedding_provider": "huggingface",
+    "embedding_model": "sentence-transformers/all-mpnet-base-v2",
+    "chunking_strategy": "window",
+    "chunking_options": {
+        "chunk_size": 1000,
+        "chunk_overlap": 200
+    },
+    "vector_store_type": "faiss"
+}
