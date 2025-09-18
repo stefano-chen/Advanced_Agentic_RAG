@@ -13,7 +13,7 @@
         "embedding_model": "sentence-transformers/all-mpnet-base-v2",
         "embedding_host": ""
     },
-    "k": 7,
+    "k": 5,
     "query_transform": "step-back",
     "query_transform_params": {
         "max_char": 100
