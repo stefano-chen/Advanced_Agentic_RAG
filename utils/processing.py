@@ -23,7 +23,5 @@ def save_to_png(agent: CompiledStateGraph):
     img.save("graph.png")
 
 def stream_response(agent: CompiledStateGraph[AgentState], user_query: str):
-    for event in agent.stream({"messages": HumanMessage(user_query), "question": user_query}):
-        node, response = event.items()
-        print(node)
-        response["messages"][-1].pretty_print()
+    for event in agent.stream({"messages": [HumanMessage(user_query)], "question": user_query, "context": ""}):
+        print(event)

@@ -6,8 +6,9 @@ import json
 from utils.processing import get_topics, save_to_png, stream_response
 from utils.llm import LLMModel
 from state import AgentState
-from nodes.validation import QueryValidation
+from nodes.query_validation import QueryValidation
 from dotenv import load_dotenv
+from nodes.tool_calling import ToolCalling, tool_condition
 
 load_dotenv("./.env")
 
@@ -33,12 +34,23 @@ if __name__ == "__main__":
 
     # Insert Graph Node and Edges
     
+    graph.add_node("retrieve_or_respond", ToolCalling(llm, prompts["retrieve_respond"], []).choose)
+
     graph.add_conditional_edges(
         START,
         QueryValidation(llm, prompts["input_check"], topics).validate,
         {
-            "yes": END,
+            "yes": "retrieve_or_respond",
             "no": END
+        }
+    )
+
+    graph.add_conditional_edges(
+        "retrieve_or_respond",
+        tool_condition,
+        {
+            "retrieve": END,
+            "respond": END
         }
     )
     agent = graph.compile()

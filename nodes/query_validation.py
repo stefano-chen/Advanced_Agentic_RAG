@@ -11,7 +11,7 @@ class QueryValidation:
         self._topics = topics
 
     def validate(self, state: AgentState) -> Literal["yes", "no"]:
-        prompt_template = PromptTemplate.from_template(self._prompt + "/no_think")
+        prompt_template = PromptTemplate.from_template(self._prompt)
         prompt = prompt_template.invoke({"question": state["question"], "topics": self._topics})
         response = self._llm.invoke(prompt)
         print(response)
