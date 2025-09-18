@@ -1,6 +1,5 @@
 import json
 import os
-from langchain_huggingface.embeddings import HuggingFaceEmbeddings
 from indexing.document_loader import DocumentLoader
 from indexing.chunking import Chunking
 from indexing.vectorstore import VectorStore
@@ -11,6 +10,10 @@ from dotenv import load_dotenv
 load_dotenv("./.env")
 
 if __name__ == "__main__":
+
+    if not Path("./config/populate_config.json").exists():
+        raise FileNotFoundError("populate_config.json not Found")
+
     with open("./config/populate_config.json", "r") as f:
         config = json.load(f)
 
