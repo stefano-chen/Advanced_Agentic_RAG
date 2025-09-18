@@ -3,6 +3,7 @@ from typing import List, Literal
 from langgraph.graph import MessagesState
 from langchain.prompts import PromptTemplate
 from langchain_core.messages import AIMessage
+from utils.state import AgentState
 
 class QueryValidation:
 
@@ -11,14 +12,14 @@ class QueryValidation:
         self._prompt = prompt
         self._topics = topics
 
-    def validate(self, state: MessagesState) -> MessagesState:
-        question = state["messages"][0].content
+    def validate(self, state: AgentState) -> AgentState:
+        question = state["question"]
         prompt_template = PromptTemplate.from_template(self._prompt)
         prompt = prompt_template.invoke({"question": question, "topics": self._topics})
         response = self._llm.invoke(prompt)
         return {"messages": [AIMessage(f"Is \"{question}\" related with at least one of this topics {self._topics}? {response.content}")]}
         
-def is_related(state: MessagesState) -> Literal["yes", "no"]:
+def is_related(state: AgentState) -> Literal["yes", "no"]:
     last_msg = state["messages"][-1]
     if "yes" in last_msg.content.lower():
         return "yes"

@@ -4,6 +4,7 @@ import io
 from pathlib import Path
 from langchain_core.messages import HumanMessage
 from langgraph.graph import MessagesState
+from utils.state import AgentState
 
 def get_topics(folder_path: str):
     store_dir = Path(folder_path)
@@ -22,7 +23,7 @@ def save_to_png(agent: CompiledStateGraph):
     img = Image.open(io.BytesIO(img_data))
     img.save("graph.png")
 
-def stream_response(agent: CompiledStateGraph[MessagesState], user_query: str):
-    for event in agent.stream({"messages": [HumanMessage(user_query)]}):
+def stream_response(agent: CompiledStateGraph[AgentState], user_query: str):
+    for event in agent.stream({"messages": [], "question": user_query, "rewritten_question": ""}):
         for value in event.values():
             value["messages"][-1].pretty_print()

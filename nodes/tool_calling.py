@@ -3,6 +3,7 @@ from typing import List, Callable, Union, Literal
 from langchain_core.tools import BaseTool
 from langgraph.graph import MessagesState
 from langchain.prompts import PromptTemplate
+from utils.state import AgentState
 
 class ToolCalling:
 
@@ -10,9 +11,9 @@ class ToolCalling:
         self._llm = llm.bind_tools(tools)
         self._prompt = prompt
 
-    def choose(self, state: MessagesState) -> MessagesState:
-        question = state["messages"][0]
-        context = state["messages"][2:]
+    def choose(self, state: AgentState) -> AgentState:
+        question = state["question"]
+        context = state["messages"]
         prompt = PromptTemplate.from_template(self._prompt).invoke({"question": question, "context": context})
         response = self._llm.invoke(prompt)
 
@@ -21,7 +22,7 @@ class ToolCalling:
         return state
     
 
-def tool_condition(state: MessagesState) -> Literal["retrieve", "respond"]:
+def tool_condition(state: AgentState) -> Literal["retrieve", "respond"]:
     last_msg = state['messages'][-1]
 
     if hasattr(last_msg, "tool_calls") and len(last_msg.tool_calls) > 0:
