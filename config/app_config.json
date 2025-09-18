@@ -4,7 +4,7 @@
     "check_input_validity": true,
     "simple_rag": false,
     "llm_provider": "lm-studio",
-    "llm_model": "qwen/qwen3-4b",
+    "llm_model": "mistralai/mistral-7b-instruct-v0.3",
     "llm_host": "http://localhost:9999/v1",
     "k": 7,
     "preprocessing_strategies": ["step-back", "hyde"],
