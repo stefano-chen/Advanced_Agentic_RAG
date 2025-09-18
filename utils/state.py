@@ -6,3 +6,4 @@ class AgentState(TypedDict):
     messages: Annotated[List[AnyMessage], add_messages]
     question: str
     context: str
+    original_question: str

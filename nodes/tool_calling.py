@@ -12,9 +12,11 @@ class ToolCalling:
         self._prompt = prompt
 
     def choose(self, state: AgentState) -> AgentState:
-        question = state["question"]
-        past_actions = "\n".join(action.text() for action in state["messages"])
-        prompt = PromptTemplate.from_template(self._prompt).invoke({"question": question, "actions": past_actions})
+        question = state["original_question"]
+        context = state["context"]
+
+        past_actions = "\n".join(action.pretty_repr() if action.type != "tool" else "" for action in state["messages"])
+        prompt = PromptTemplate.from_template(self._prompt).invoke({"question": question, "context": context, "actions": past_actions})
         response = self._llm.invoke(prompt)
         state["messages"].append(response)
         return state
