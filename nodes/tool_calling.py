@@ -13,13 +13,10 @@ class ToolCalling:
 
     def choose(self, state: AgentState) -> AgentState:
         question = state["question"]
-        context = state["messages"]
+        context = state["messages"][2:]
         prompt = PromptTemplate.from_template(self._prompt).invoke({"question": question, "context": context})
         response = self._llm.invoke(prompt)
-
-        state['messages'].append(response)
-
-        return state
+        return {"messages": [response]}
     
 
 def tool_condition(state: AgentState) -> Literal["retrieve", "respond"]:

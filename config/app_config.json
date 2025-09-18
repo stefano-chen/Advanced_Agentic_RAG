@@ -3,12 +3,16 @@
     "vector_db": "faiss",
     "check_input_validity": true,
     "simple_rag": false,
-    "llm_provider": "lm-studio",
-    "llm_model": "google/gemma-2-9b",
-    "llm_host": "http://localhost:9999/v1",
-    "embedding_provider": "huggingface",
-    "embedding_model": "sentence-transformers/all-mpnet-base-v2",
-    "embedding_host": "",
+    "llm": {
+        "llm_provider": "lm-studio",
+        "llm_model": "google/gemma-2-9b",
+        "llm_host": "http://localhost:9999/v1"
+    },
+    "embedding": {
+        "embedding_provider": "huggingface",
+        "embedding_model": "sentence-transformers/all-mpnet-base-v2",
+        "embedding_host": ""
+    },
     "k": 7,
     "preprocessing_strategies": ["step-back", "hyde"],
     "preprocessing_strategies_options": {

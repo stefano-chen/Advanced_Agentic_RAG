@@ -5,9 +5,9 @@ from langchain.tools import Tool
 from pathlib import Path
 from indexing.embedding import EmbeddingModel
 
-def get_tools(vector_store_type: str, vector_store_dir: str, k: int, emb_provider: str, emb_name: str, emb_host: str) -> List[Tool]:
+def get_tools(vector_store_type: str, vector_store_dir: str, k: int, config: dict[str, str]) -> List[Tool]:
     tools = []
-    embedding_model = EmbeddingModel(emb_provider, emb_name, emb_host).get()
+    embedding_model = EmbeddingModel(config=config).get()
     store_dir = Path(vector_store_dir)
     for dir in store_dir.iterdir():
         vector_store = VectorStore(vector_store_type, embedding_model, dir.absolute())

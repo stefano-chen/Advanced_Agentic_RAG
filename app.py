@@ -23,15 +23,15 @@ if __name__ == "__main__":
     with open("./config/prompts.json") as f:
         prompts = json.load(f)
 
-    llm = LLMModel(app_config["llm_provider"], app_config["llm_model"], app_config["llm_host"]).get()
+    llm = LLMModel(app_config["llm"]).get()
 
     topics = get_topics(app_config["db_dir_path"])
 
-    tools = get_tools(app_config["vector_db"], app_config["db_dir_path"], app_config["k"], app_config["embedding_provider"], app_config["embedding_model"], app_config["embedding_host"])
+    tools = get_tools(app_config["vector_db"], app_config["db_dir_path"], app_config["k"], app_config["embedding"])
 
     agent = build_agent(llm, prompts, tools, topics)
 
-    save_to_png(agent)
+    # save_to_png(agent)
     user_query = input("Enter: ")
     
     stream_response(agent, user_query)
