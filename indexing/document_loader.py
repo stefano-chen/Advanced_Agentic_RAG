@@ -6,7 +6,7 @@ class DocumentLoader:
         self.type = file_type
         if self.type.lower() == "pdf":
             self.loader = PyPDFLoader(file_path=file_path)
-        if self.type.lower() == "csv":
+        elif self.type.lower() == "csv":
             self.loader = CSVLoader(file_path=file_path)
         else:
             raise Exception(f"File type {file_type} not supported")

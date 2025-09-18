@@ -34,15 +34,15 @@ class VectorStore:
     def add_documents(self, documents: List[Document]):
         return self.vectorstore.add_documents(documents=documents)
     
-    def load(self, load_dir_path: str, embedding_model: Embeddings):
-        dir = Path(load_dir_path)
+    def load(self,):
+        dir = Path(self.save_dir_path)
         if not dir.exists():
             raise FileNotFoundError(f"Directory {dir} not found")
         
         if self.store_type == "faiss":
             self.vectorstore = FAISS.load_local(
-                folder_path=load_dir_path,
-                embeddings=embedding_model,
+                folder_path=self.save_dir_path,
+                embeddings=self.embedding_model,
                 allow_dangerous_deserialization=True
             )
 

@@ -6,6 +6,9 @@
     "llm_provider": "google",
     "llm_model": "gemini-2.5-flash-lite",
     "llm_host": "",
+    "embedding_provider": "huggingface",
+    "embedding_model": "sentence-transformers/all-mpnet-base-v2",
+    "embedding_host": "",
     "k": 7,
     "preprocessing_strategies": ["step-back", "hyde"],
     "preprocessing_strategies_options": {
