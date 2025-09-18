@@ -14,20 +14,15 @@
         "embedding_host": ""
     },
     "k": 7,
-    "preprocessing_strategies": ["step-back", "hyde"],
-    "preprocessing_strategies_options": {
-        "step-back": {
-            "max_tokens": 300
-        },
-        "hyde": {
-            "max_tokens": 300
-        }
+    "query_transform": "step-back",
+    "query_transform_params": {
+        "max_char": 100
     },
     "reranking_strategies": ["semantic"],
     "reranking_strategies_options": {
         "semantic": {
             "model_provider": "lm-studio",
-            "model_name": "qwen/qwen3-4b",
+            "model_name": "google/gemma-2-9b",
             "model_host": "http://localhost:9999/v1"
         }
     },

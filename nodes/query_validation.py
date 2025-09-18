@@ -17,7 +17,8 @@ class QueryValidation:
         prompt_template = PromptTemplate.from_template(self._prompt)
         prompt = prompt_template.invoke({"question": question, "topics": self._topics})
         response = self._llm.invoke(prompt)
-        return {"messages": [AIMessage(f"Is \"{question}\" related with at least one of this topics {self._topics}? {response.content}")]}
+        state["messages"].append(AIMessage(f"Is \"{question}\" related with at least one of this topics {self._topics}? {response.content}"))
+        return state
         
 def is_related(state: AgentState) -> Literal["yes", "no"]:
     last_msg = state["messages"][-1]
