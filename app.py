@@ -1,6 +1,6 @@
 from pathlib import Path
 import json
-from utils.processing import get_topics, save_to_png, stream_response
+from utils.processing import save_to_png, stream_response
 
 
 from utils.agent import build_agent
@@ -25,7 +25,7 @@ if __name__ == "__main__":
 
     agent = build_agent(app_config, prompts)
 
-    save_to_png(agent)
+    # save_to_png(agent)
     user_query = input("Enter: ")
     
     stream_response(agent, user_query)

@@ -9,6 +9,7 @@ from tools.retrieval import get_tools
 from utils.llm import LLMModel
 from nodes.update_context import update_context
 from nodes.answer import GenerateAnswer
+from nodes.output_validation import AnswerValidation
 
 def build_agent(app_config, prompts):
 
@@ -25,7 +26,8 @@ def build_agent(app_config, prompts):
     graph.add_node("retrieve_or_respond", ToolCalling(llm, prompts["retrieve_respond"], tools).choose)
     graph.add_node("tool_execution", ToolNode(tools))
     graph.add_node("update_context", update_context)
-    graph.add_node("generate_answer", GenerateAnswer(llm, prompts).generate_answer)
+    graph.add_node("generate_answer", GenerateAnswer(llm, prompts["output"]).generate_answer)
+    graph.add_node("validate_answer", AnswerValidation(llm, prompts["output_check"]).validate)
     # Create Edeges
     graph.add_edge(START, "validate_input")
     graph.add_conditional_edges(
@@ -47,6 +49,7 @@ def build_agent(app_config, prompts):
     )
     graph.add_edge("tool_execution", "update_context")
     graph.add_edge("update_context", "retrieve_or_respond")
-    graph.add_edge("generate_answer", END)
+    graph.add_edge("generate_answer", "validate_answer")
+    graph.add_edge("validate_answer", END)
     # return the compiled graph
     return graph.compile()

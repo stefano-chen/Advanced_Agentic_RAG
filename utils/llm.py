@@ -5,9 +5,9 @@ class LLMModel:
     
     def __init__(self, config: dict[str, str]):
         if config["llm_provider"] == "lm-studio":
-            self._llm = ChatOpenAI(name=config["llm_model"], base_url=config["llm_host"], api_key="not needed")
+            self._llm = ChatOpenAI(name=config["llm_model"], base_url=config["llm_host"], api_key="not needed", temperature=0)
         elif config["llm_provider"] == "google":
-            self._llm = ChatGoogleGenerativeAI(model=config["llm_model"])
+            self._llm = ChatGoogleGenerativeAI(model=config["llm_model"], temperature=0)
         else:
             raise Exception(f"LLM provider {config["llm_provider"]} not supported")
         
