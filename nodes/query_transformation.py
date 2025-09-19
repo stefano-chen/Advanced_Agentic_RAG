@@ -30,7 +30,7 @@ class QueryTransform:
         if not self._prompt:
             raise Exception("Query transformation prompt not Found")
         
-        question = state["question"]
+        question = state["original_question"]
 
         prompt = PromptTemplate.from_template(self._prompt).invoke({"max_char": self._max_char, "question": question})
 

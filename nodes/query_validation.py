@@ -13,7 +13,7 @@ class QueryValidation:
         self._topics = topics
 
     def validate(self, state: AgentState) -> AgentState:
-        question = state["question"]
+        question = state["original_question"]
         prompt_template = PromptTemplate.from_template(self._prompt)
         prompt = prompt_template.invoke({"question": question, "topics": self._topics})
         response = self._llm.invoke(prompt)

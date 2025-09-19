@@ -12,6 +12,7 @@ from nodes.answer import GenerateAnswer
 from nodes.output_validation import AnswerValidation
 from nodes.reranking import Reranking
 from nodes.selection import ChunckSelection
+from nodes.tool_calling import Choice
 
 def build_agent(app_config, prompts):
 
@@ -25,7 +26,8 @@ def build_agent(app_config, prompts):
     # Insert Graph Node
     graph.add_node("validate_input", QueryValidation(llm, prompts["input_check"], topics).validate)
     graph.add_node("query_transform", QueryTransform(app_config["query_transform"], app_config["query_transform_options"], llm, prompts["query_transformation"]).transform)
-    graph.add_node("retrieve_or_respond", ToolCalling(llm, prompts["retrieve_respond"], tools).choose)
+    graph.add_node("retrieve_or_respond", Choice(llm, prompts["retrieve_respond"]).choose)
+    graph.add_node("tool_routing", ToolCalling(llm, prompts["tool_calling"], tools).call)
     graph.add_node("tool_execution", ToolNode(tools))
     graph.add_node("reranking", Reranking(app_config["reranking_strategies"], app_config["reranking_weights"], app_config["reranking_strategies_options"], prompts).rerank)
     graph.add_node("selection", ChunckSelection(app_config["selection_strategies"], app_config["selection_options"]).select)
@@ -43,8 +45,9 @@ def build_agent(app_config, prompts):
         }
     )
     graph.add_edge("query_transform", "retrieve_or_respond")
+    graph.add_edge("retrieve_or_respond", "tool_routing")
     graph.add_conditional_edges(
-        "retrieve_or_respond",
+        "tool_routing",
         tool_condition,
         {
             "retrieve": "tool_execution",
