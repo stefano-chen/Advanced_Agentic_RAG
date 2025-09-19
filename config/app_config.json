@@ -19,6 +19,7 @@
         "max_char": 100
     },
     "reranking_strategies": ["semantic"],
+    "reranking_weights": [1],
     "reranking_strategies_options": {
         "semantic": {
             "model_provider": "lm-studio",

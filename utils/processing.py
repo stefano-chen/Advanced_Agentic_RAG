@@ -29,17 +29,17 @@ def stream_response(agent: CompiledStateGraph[AgentState], user_query: str):
 
     debug = os.getenv("DEBUG", "false")
 
-    for event in agent.stream({"messages": [HumanMessage(user_query)], "question": user_query, "context": "", "original_question": user_query}):
+    for event in agent.stream(AgentState.create(messages=[HumanMessage(user_query)], question=user_query)):
         for key, value in event.items():
             print("\nSTEP:", key)
-            value["messages"][-1].pretty_print()
+            last_msg =  value["messages"][-1]
+            last_msg.pretty_print()
             if debug == "true":
-                if "question" in value:
-                    question = value["question"]
-                    print(f"\nQuestion: {question}")
-                if "original_question" in value:
-                    original_question = value["original_question"]
-                    print(f"\nOriginal Question: {original_question}")
-                if "context" in value:
+                if last_msg.type != "tool":
+                    print(f"Question: {value["question"]}")
+                    print(f"Original Question: {value["original_question"]}")
                     context = (value["context"][:100] + "...") if value["context"] else ""
                     print(f"Context: {context}")
+                    print(f"Reranking score: {value["reranking_score"]}")
+                    chunks = (str(value["chunks"])[:100] + "...]") if value["chunks"] else []
+                    print(f"Chunks: {chunks}")

@@ -27,7 +27,7 @@ class QueryTransform:
 
         prompt = PromptTemplate.from_template(self._prompt).invoke({"max_char": self._max_char, "question": question})
 
-        rewritten_question = self._llm.invoke(prompt).content
+        rewritten_question = self._llm.invoke(prompt).content.strip()
         state["messages"].append(AIMessage(f"\"{question}\" -> {rewritten_question}"))
         state["question"] = rewritten_question
         return state
