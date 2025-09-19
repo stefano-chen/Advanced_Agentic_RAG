@@ -3,20 +3,27 @@ from utils.state import AgentState
 from langchain_core.language_models.chat_models import BaseChatModel
 from langchain.prompts import PromptTemplate
 from langchain_core.messages import AIMessage
+from typing import Dict, Any
 
 class QueryTransform:
 
-    def __init__(self, type: str, kwargs: dict[str, any], llm: BaseChatModel, prompts: dict[str, str]):
+    def __init__(self, strategy: str, options: Dict[str, Dict[str, Any]], llm: BaseChatModel, prompts: dict[str, str]):
         self._llm = llm
 
-        if type == "step-back":
+        if strategy == "step-back":
             self._prompt = prompts.get("step-back", None)
-            self._max_char = kwargs.get("max_char", 100)
-        elif type == "hyde":
+            strategy_options = options.get("step-back")
+            if not strategy_options:
+                raise Exception(f"{strategy} options not found")
+            self._max_char = strategy_options.get("max_char", 100)
+        elif strategy == "hyde":
+            strategy_options = options.get("hyde")
+            if not strategy_options:
+                raise Exception(f"{strategy} options not found")
             self._prompt = prompts.get("hyde", None)
-            self._max_char = kwargs.get("max_char", 500)
+            self._max_char = options.get("max_char", 500)
         else:
-            raise Exception(f"Query transformation {type} is not supported")
+            raise NotImplementedError(f"Query transformation {strategy} is not supported")
 
     
     def transform(self, state: AgentState) -> AgentState:

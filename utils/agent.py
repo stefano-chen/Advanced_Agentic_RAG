@@ -24,7 +24,7 @@ def build_agent(app_config, prompts):
     graph = StateGraph(AgentState)
     # Insert Graph Node
     graph.add_node("validate_input", QueryValidation(llm, prompts["input_check"], topics).validate)
-    graph.add_node("query_transform", QueryTransform(app_config["query_transform"], app_config["query_transform_params"], llm, prompts).transform)
+    graph.add_node("query_transform", QueryTransform(app_config["query_transform"], app_config["query_transform_options"], llm, prompts["query_transformation"]).transform)
     graph.add_node("retrieve_or_respond", ToolCalling(llm, prompts["retrieve_respond"], tools).choose)
     graph.add_node("tool_execution", ToolNode(tools))
     graph.add_node("reranking", Reranking(app_config["reranking_strategies"], app_config["reranking_weights"], app_config["reranking_strategies_options"], prompts).rerank)

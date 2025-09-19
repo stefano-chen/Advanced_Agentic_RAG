@@ -4,6 +4,7 @@ from langchain_core.tools import BaseTool
 from langgraph.graph import MessagesState
 from langchain.prompts import PromptTemplate
 from utils.state import AgentState
+from langchain_core.messages import AnyMessage
 
 class ToolCalling:
 
@@ -11,12 +12,18 @@ class ToolCalling:
         self._llm = llm.bind_tools(tools)
         self._prompt = prompt
 
+    def _get_past_tool_calls(self, messages: List[AnyMessage]) -> str:
+        past_tool_calls = ""
+        for msg in messages:
+            if msg.type == "ai" and hasattr(msg, "tool_calls") and len(msg.tool_calls) > 0:
+                past_tool_calls += str(msg.tool_calls) + "\n"
+        return past_tool_calls
+
     def choose(self, state: AgentState) -> AgentState:
         question = state["original_question"]
         context = state["context"]
-
-        past_actions = "\n".join(action.pretty_repr() if action.type != "tool" else "" for action in state["messages"])
-        prompt = PromptTemplate.from_template(self._prompt).invoke({"question": question, "context": context, "actions": past_actions})
+        past_tool_calls = self._get_past_tool_calls(state["messages"])
+        prompt = PromptTemplate.from_template(self._prompt).invoke({"question": question, "context": context, "past_tool_calls": past_tool_calls})
         response = self._llm.invoke(prompt)
         state["messages"].append(response)
         return state
