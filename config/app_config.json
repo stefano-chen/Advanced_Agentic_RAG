@@ -32,8 +32,11 @@
             "embedding_host": ""
         }
     },
-    "selection_type": ["topk"],
+    "selection_strategies": ["threshold", "topk"],
     "selection_options": {
+        "threshold":{
+            "min": 0.6
+        },
         "topk":{
             "k": 4
         }

@@ -14,7 +14,9 @@ class AnswerValidation:
         answer = state['messages'][-1].content
         prompt = PromptTemplate.from_template(self._prompt).invoke({"question":question, "context": context, "answer": answer})
         response = self._llm.invoke(prompt)
-        state['messages'].append(response)
+
+        if "pass" not in response.content.lower():
+            state['messages'].append(response)
 
         return state
     

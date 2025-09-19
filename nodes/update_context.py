@@ -10,8 +10,7 @@ def update_context(state: AgentState):
     if state["chunks"]:
         new_context = "\n\n".join(state['chunks'])
         message = AIMessage("Context Updated")
-        state["chunks"] = []
-        state["reranking_score"] = []
+        state["chunks"] = None
         state['context'] = state['context'] + new_context
     else:
         message = AIMessage("No new Context")

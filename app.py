@@ -25,7 +25,7 @@ if __name__ == "__main__":
 
     agent = build_agent(app_config, prompts)
 
-    # Uncomment the following line, to generate a png with the agent structure
+    # Uncomment the following line, to generate a png image of the agent's structure
     save_to_png(agent)
     user_query = input("Enter: ")
     

@@ -41,5 +41,5 @@ def stream_response(agent: CompiledStateGraph[AgentState], user_query: str):
                     context = (value["context"][:100] + "...") if value["context"] else ""
                     print(f"Context: {context}")
                     print(f"Reranking score: {value["reranking_score"]}")
-                    chunks = (str(value["chunks"])[:100] + "...]") if value["chunks"] else []
+                    chunks = (str(value["chunks"])[:100] + "...]") if value["chunks"] else value["chunks"]
                     print(f"Chunks: {chunks}")
