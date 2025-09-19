@@ -6,6 +6,7 @@ from langchain_core.messages import HumanMessage
 from langgraph.graph import MessagesState
 from utils.state import AgentState
 import os
+from langchain_core.runnables.graph import MermaidDrawMethod
 
 def get_topics(folder_path: str):
     store_dir = Path(folder_path)
@@ -20,7 +21,7 @@ def get_topics(folder_path: str):
     return topics
 
 def save_to_png(agent: CompiledStateGraph):
-    img_data = agent.get_graph().draw_mermaid_png()
+    img_data = agent.get_graph().draw_mermaid_png(draw_method=MermaidDrawMethod.PYPPETEER)
     img = Image.open(io.BytesIO(img_data))
     img.save("graph.png")
 
