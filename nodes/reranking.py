@@ -61,9 +61,8 @@ class Reranking:
 
     def rerank(self, state: AgentState) -> AgentState:
         question = state["original_question"]
-        chunks = state["messages"][-1].content.split("\n\n")
         scores_per_strategy = []
-
+        chunks = state["chunks"]
         for strategy in self._strategies:
             if strategy == "semantic":
                 scores_per_strategy.append(self._calculate_semantic_score(question, chunks))
@@ -82,6 +81,5 @@ class Reranking:
         
         state["messages"].append(AIMessage(f"weighted average score between all reranking techniques: {final_score}"))
         state["reranking_score"] = final_score
-        state["chunks"] = chunks
-        
+
         return state

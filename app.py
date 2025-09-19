@@ -25,8 +25,10 @@ if __name__ == "__main__":
 
     agent = build_agent(app_config, prompts)
 
-    # Uncomment the following line, to generate a png image of the agent's structure
-    # save_to_png(agent)
+    save_to_png_flag = app_config.get("save_to_png", False)
+    image_name = app_config.get("image_name", "graph.png")
+    if save_to_png_flag:
+        save_to_png(agent, image_name)
+
     user_query = input("Enter: ")
-    
     stream_response(agent, user_query)

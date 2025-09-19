@@ -20,10 +20,10 @@ def get_topics(folder_path: str):
 
     return topics
 
-def save_to_png(agent: CompiledStateGraph):
+def save_to_png(agent: CompiledStateGraph, file_name: str):
     img_data = agent.get_graph().draw_mermaid_png(draw_method=MermaidDrawMethod.PYPPETEER)
     img = Image.open(io.BytesIO(img_data))
-    img.save("graph.png")
+    img.save(file_name)
 
 def stream_response(agent: CompiledStateGraph[AgentState], user_query: str):
 

@@ -2,7 +2,9 @@
     "db_dir_path": "./store",
     "vector_db": "faiss",
     "check_input_validity": true,
-    "simple_rag": false,
+    "advanced_rag": true,
+    "save_to_png": true,
+    "image_name": "graph.png",
     "llm": {
         "llm_provider": "lm-studio",
         "llm_model": "google/gemma-2-9b",
@@ -13,7 +15,7 @@
         "embedding_model": "sentence-transformers/all-mpnet-base-v2",
         "embedding_host": ""
     },
-    "k": 7,
+    "k": 5,
     "query_transform": "hyde",
     "query_transform_options": {
         "step-back": {
@@ -46,5 +48,5 @@
             "k": 3
         }
     },
-    "check_output_response_validity": true
+    "check_output_validity": true
 }

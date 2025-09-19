@@ -14,7 +14,7 @@ class AgentState(TypedDict):
     def create(cls, messages=[], question=""):
         return AgentState(
             messages=messages, 
-            question=None,
+            question=question,
             context="",
             chunks=None,
             original_question=question,
