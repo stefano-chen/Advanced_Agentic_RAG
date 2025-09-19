@@ -3,7 +3,19 @@ from langchain_core.messages import AIMessage
 
 def update_context(state: AgentState):
 
-    state['messages'].append(AIMessage("Context Updated"))
-    state['context'] = "\n\n".join(state['chunks'])
+    new_context = ""
+
+    message = None
+
+    if state["chunks"]:
+        new_context = "\n\n".join(state['chunks'])
+        message = AIMessage("Context Updated")
+        state["chunks"] = []
+        state["reranking_score"] = []
+        state['context'] = state['context'] + new_context
+    else:
+        message = AIMessage("No new Context")
+
+    state['messages'].append(message)
 
     return state

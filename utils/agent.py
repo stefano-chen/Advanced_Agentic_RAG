@@ -26,7 +26,7 @@ def build_agent(app_config, prompts):
     graph.add_node("query_transform", QueryTransform(app_config["query_transform"], app_config["query_transform_params"], llm, prompts).transform)
     graph.add_node("retrieve_or_respond", ToolCalling(llm, prompts["retrieve_respond"], tools).choose)
     graph.add_node("tool_execution", ToolNode(tools))
-    graph.add_node("reranking", Reranking(llm, app_config["reranking_strategies"], app_config["reranking_weights"] ,prompts).rerank)
+    graph.add_node("reranking", Reranking(app_config["reranking_strategies"], app_config["reranking_weights"], app_config["reranking_strategies_options"], prompts).rerank)
     graph.add_node("update_context", update_context)
     graph.add_node("generate_answer", GenerateAnswer(llm, prompts["output"]).generate_answer)
     graph.add_node("validate_answer", AnswerValidation(llm, prompts["output_check"]).validate)

@@ -18,13 +18,18 @@
     "query_transform_params": {
         "max_char": 100
     },
-    "reranking_strategies": ["semantic"],
-    "reranking_weights": [1],
+    "reranking_strategies": ["semantic", "distance"],
+    "reranking_weights": [0.7, 0.3],
     "reranking_strategies_options": {
         "semantic": {
-            "model_provider": "lm-studio",
-            "model_name": "google/gemma-2-9b",
-            "model_host": "http://localhost:9999/v1"
+            "llm_provider": "lm-studio",
+            "llm_model": "google/gemma-2-9b",
+            "llm_host": "http://localhost:9999/v1"
+        },
+        "distance": {
+            "embedding_provider": "huggingface",
+            "embedding_model": "sentence-transformers/all-mpnet-base-v2",
+            "embedding_host": ""
         }
     },
     "selection_type": ["topk"],
