@@ -2,10 +2,10 @@ from langgraph.graph.state import CompiledStateGraph
 from PIL import Image
 import io
 from pathlib import Path
-from langchain_core.messages import HumanMessage, AIMessage
+from langchain_core.messages import HumanMessage
 from utils.state import AgentState
-from typing import List, Union
 from langchain_core.runnables.graph import MermaidDrawMethod
+import time
 
 def get_topics(folder_path: str):
     store_dir = Path(folder_path)
@@ -28,10 +28,11 @@ def stream_response(agent: CompiledStateGraph[AgentState], user_query: str, chat
 
     last_msg = None
     prefix = "\n" if verbosity > 0 else ""
-
+    start = time.time()
     for event in agent.stream(AgentState.create(messages=[HumanMessage(user_query)], question=user_query, history=chat_history)):
+        end = time.time()
         for key, value in event.items():
-            print(f"{prefix}STEP: {key}", flush=True)
+            print(f"{prefix}STEP: {key} ({(end - start):.2f}s)", flush=True)
             last_msg =  value["messages"][-1]
             if verbosity > 0:
                 last_msg.pretty_print()
@@ -47,5 +48,6 @@ def stream_response(agent: CompiledStateGraph[AgentState], user_query: str, chat
                         print(f"Chunks: {chunks}")
                         print(f"Chat History:\n{chat_history}")
                         print(f"{'-'*80}")
+        start = end
 
     return last_msg.content
