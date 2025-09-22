@@ -14,6 +14,7 @@ from nodes.reranking import Reranking
 from nodes.selection import ChunckSelection
 from nodes.tool_calling import Choice
 from nodes.extract_chunks import extract_chunks
+from nodes.history import HistorySummarizer
 
 def build_agent(app_config, prompts):
 
@@ -30,6 +31,7 @@ def build_agent(app_config, prompts):
     graph = StateGraph(AgentState)
     
     # Simple RAG Nodes
+    graph.add_node("history_integration", HistorySummarizer(llm, prompts["history"]).summarize)
     graph.add_node("retrieve_or_respond", Choice(llm, prompts["retrieve_respond"]).choose)
     graph.add_node("tool_routing", ToolCalling(llm, prompts["tool_calling"], tools).call)
     graph.add_node("tool_execution", ToolNode(tools))
@@ -48,6 +50,7 @@ def build_agent(app_config, prompts):
             graph.add_node("validate_answer", AnswerValidation(llm, prompts["output_check"]).validate)
 
     # Always Present Edges
+    graph.add_edge(START, "history_integration")
     graph.add_edge("retrieve_or_respond", "tool_routing")
     graph.add_conditional_edges(
         "tool_routing",
@@ -63,7 +66,7 @@ def build_agent(app_config, prompts):
     if advanced_rag_flag:
         # Advanced RAG Edge
         if check_input_validity_flag:
-            graph.add_edge(START, "validate_input")
+            graph.add_edge("history_integration", "validate_input")
             graph.add_conditional_edges(
                 "validate_input",
                 is_related,
@@ -73,7 +76,7 @@ def build_agent(app_config, prompts):
                 }
             )
         else:
-            graph.add_edge(START, "query_transform")
+            graph.add_edge("history_integration", "query_transform")
         graph.add_edge("query_transform", "retrieve_or_respond")
         graph.add_edge("extract_chunks", "reranking")
         graph.add_edge("reranking", "selection")
@@ -85,7 +88,7 @@ def build_agent(app_config, prompts):
             graph.add_edge("generate_answer", END)
     else:
         # Simple RAG Edge
-        graph.add_edge(START, "retrieve_or_respond")
+        graph.add_edge("history_integration", "retrieve_or_respond")
         graph.add_edge("generate_answer", END)
         graph.add_edge("extract_chunks", "update_context")
 

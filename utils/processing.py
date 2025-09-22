@@ -2,10 +2,9 @@ from langgraph.graph.state import CompiledStateGraph
 from PIL import Image
 import io
 from pathlib import Path
-from langchain_core.messages import HumanMessage
-from langgraph.graph import MessagesState
+from langchain_core.messages import HumanMessage, AIMessage
 from utils.state import AgentState
-import os
+from typing import List, Union
 from langchain_core.runnables.graph import MermaidDrawMethod
 
 def get_topics(folder_path: str):
@@ -25,12 +24,12 @@ def save_to_png(agent: CompiledStateGraph, file_name: str):
     img = Image.open(io.BytesIO(img_data))
     img.save(file_name)
 
-def stream_response(agent: CompiledStateGraph[AgentState], user_query: str, verbosity: int = 0):
+def stream_response(agent: CompiledStateGraph[AgentState], user_query: str, history: List[Union[AIMessage, HumanMessage]],  verbosity: int = 0):
 
     last_msg = None
     prefix = "\n" if verbosity > 0 else ""
 
-    for event in agent.stream(AgentState.create(messages=[HumanMessage(user_query)], question=user_query)):
+    for event in agent.stream(AgentState.create(messages=[HumanMessage(user_query)], question=user_query, history=history)):
         for key, value in event.items():
             print(f"{prefix}STEP: {key}", flush=True)
             last_msg =  value["messages"][-1]
@@ -48,4 +47,8 @@ def stream_response(agent: CompiledStateGraph[AgentState], user_query: str, verb
                         print(f"Chunks: {chunks}")
                         print(f"{'-'*80}")
     
-    print(f"\n{'-'*36} Answer {'-'*36}\n{last_msg.content}")
+    answer = last_msg.content
+
+    print(f"\n{'-'*36} Answer {'-'*36}\n{answer}")
+
+    return answer
