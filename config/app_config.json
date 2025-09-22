@@ -16,7 +16,7 @@
         "embedding_model": "sentence-transformers/all-mpnet-base-v2",
         "embedding_host": ""
     },
-    "k": 5,
+    "k": 7,
     "query_transform": "hyde",
     "query_transform_options": {
         "step-back": {
