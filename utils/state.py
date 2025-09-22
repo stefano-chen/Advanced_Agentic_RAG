@@ -1,5 +1,5 @@
 from typing import List, TypedDict, Annotated, Union
-from langchain_core.messages import AnyMessage, AIMessage, HumanMessage
+from langchain_core.messages import AnyMessage
 from langgraph.graph.message import add_messages
 
 class AgentState(TypedDict):
@@ -9,10 +9,10 @@ class AgentState(TypedDict):
     chunks: Union[List[str], None]
     original_question: str
     reranking_score: Union[List[float], None]
-    history: List[Union[AIMessage, HumanMessage]]
+    history: str
 
     @classmethod
-    def create(cls, messages=[], question="", history=[]):
+    def create(cls, messages=[], question="", history=""):
         return AgentState(
             messages=messages, 
             question=question,

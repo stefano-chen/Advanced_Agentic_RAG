@@ -24,12 +24,12 @@ def save_to_png(agent: CompiledStateGraph, file_name: str):
     img = Image.open(io.BytesIO(img_data))
     img.save(file_name)
 
-def stream_response(agent: CompiledStateGraph[AgentState], user_query: str, history: List[Union[AIMessage, HumanMessage]],  verbosity: int = 0):
+def stream_response(agent: CompiledStateGraph[AgentState], user_query: str, chat_history: str,  verbosity: int = 0):
 
     last_msg = None
     prefix = "\n" if verbosity > 0 else ""
 
-    for event in agent.stream(AgentState.create(messages=[HumanMessage(user_query)], question=user_query, history=history)):
+    for event in agent.stream(AgentState.create(messages=[HumanMessage(user_query)], question=user_query, history=chat_history)):
         for key, value in event.items():
             print(f"{prefix}STEP: {key}", flush=True)
             last_msg =  value["messages"][-1]
@@ -45,10 +45,7 @@ def stream_response(agent: CompiledStateGraph[AgentState], user_query: str, hist
                         print(f"Reranking score: {value["reranking_score"]}")
                         chunks = (str(value["chunks"])[:100] + "...]") if value["chunks"] else value["chunks"]
                         print(f"Chunks: {chunks}")
+                        print(f"Chat History:\n{chat_history}")
                         print(f"{'-'*80}")
-    
-    answer = last_msg.content
 
-    print(f"\n{'-'*36} Answer {'-'*36}\n{answer}")
-
-    return answer
+    return last_msg.content

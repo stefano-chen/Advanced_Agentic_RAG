@@ -14,7 +14,7 @@ class HistorySummarizer:
     def summarize(self, state: AgentState) -> AgentState:
         
         question = state["original_question"]
-        history = "\n".join(msg.content for msg in state["history"])
+        history = state["history"]
 
         prompt = PromptTemplate.from_template(self._prompt).invoke({"question": question, "history": history})
 
