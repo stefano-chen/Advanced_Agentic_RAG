@@ -35,10 +35,13 @@ class VectorStore:
 
     def add_documents(self, documents: List[Document]):
         if not documents:
-            raise ValueError("None value found")
+            raise ValueError("None or empty value found")
         return self.vectorstore.add_documents(documents=documents)
     
     def load(self):
+        # Note: When using ChromaDB you are not required to use the load method
+        # Just pass the loading directory to the __init__
+
         dir = Path(self.save_dir_path)
         if not dir.exists():
             raise FileNotFoundError(f"Directory {dir} not found")
@@ -51,8 +54,11 @@ class VectorStore:
             )
 
     def save(self):
+        # Note: When using ChromaDB you are not required to use the save method
+        # Just pass the saving directory to the __init__
         if self.store_type == "chroma":
             return
+        
         if self.save_dir_path:
             dir = Path(self.save_dir_path)
             if not dir.exists():
@@ -61,6 +67,6 @@ class VectorStore:
             if self.store_type == "faiss":
                 self.vectorstore.save_local(folder_path=dir)
         else:
-            raise Exception("save path not provided")
+            raise Exception("save path not provided in the instantiation phase")
 
     

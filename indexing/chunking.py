@@ -26,4 +26,7 @@ class Chunking:
             raise NotImplementedError(f"Chunking strategy {self.chunking_strategy} not supported")
         
     def apply(self, documents: List[Document]):
+        if not documents:
+            raise ValueError("None or empty value found")
+        
         return self.text_splitter.split_documents(documents=documents)

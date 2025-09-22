@@ -6,7 +6,9 @@ class DocumentLoader:
     def __init__(self, file_type: str, file_path: str):
         if not Path(file_path).exists():
             raise FileExistsError(f"{file_path} not Found")
+        
         self.type = file_type
+
         if self.type.lower() == "pdf":
             self.loader = PyPDFLoader(file_path=file_path)
         elif self.type.lower() == "csv":
