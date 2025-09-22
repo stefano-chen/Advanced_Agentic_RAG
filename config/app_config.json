@@ -1,5 +1,5 @@
 {
-    "verbosity": 0,
+    "verbosity": 2,
     "db_dir_path": "./store",
     "vector_db": "faiss",
     "check_input_validity": true,
