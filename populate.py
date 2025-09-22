@@ -3,7 +3,7 @@ import os
 from indexing.document_loader import DocumentLoader
 from indexing.chunking import Chunking
 from indexing.vectorstore import VectorStore
-from indexing.embedding import EmbeddingModel
+from utils.embedding import EmbeddingModel
 from pathlib import Path
 from dotenv import load_dotenv
 

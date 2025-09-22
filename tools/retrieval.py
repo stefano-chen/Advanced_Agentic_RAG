@@ -3,7 +3,7 @@ from typing import List, Callable
 from langchain.tools.retriever import create_retriever_tool
 from langchain.tools import Tool
 from pathlib import Path
-from indexing.embedding import EmbeddingModel
+from utils.embedding import EmbeddingModel
 from langchain_community.tools import DuckDuckGoSearchRun
 
 def get_tools(vector_store_type: str, vector_store_dir: str, k: int, config: dict[str, str]) -> List[Tool]:

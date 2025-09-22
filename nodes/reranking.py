@@ -6,7 +6,7 @@ from langchain.prompts import PromptTemplate
 import numpy as np
 from langchain_core.messages import AIMessage
 from utils.llm import LLMModel
-from indexing.embedding import EmbeddingModel
+from utils.embedding import EmbeddingModel
 
 # class Grade(BaseModel):
 #     score: float = Field(description="A score between 0 and 1, that measure how much a chunk is related to a user's question")
