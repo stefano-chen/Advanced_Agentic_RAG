@@ -25,21 +25,27 @@ def save_to_png(agent: CompiledStateGraph, file_name: str):
     img = Image.open(io.BytesIO(img_data))
     img.save(file_name)
 
-def stream_response(agent: CompiledStateGraph[AgentState], user_query: str):
+def stream_response(agent: CompiledStateGraph[AgentState], user_query: str, verbosity: int = 0):
 
-    debug = os.getenv("DEBUG", "false")
+    last_msg = None
+    prefix = "\n" if verbosity > 0 else ""
 
     for event in agent.stream(AgentState.create(messages=[HumanMessage(user_query)], question=user_query)):
         for key, value in event.items():
-            print("\nSTEP:", key)
+            print(f"{prefix}STEP: {key}", flush=True)
             last_msg =  value["messages"][-1]
-            last_msg.pretty_print()
-            if debug == "true":
-                if last_msg.type != "tool":
-                    print(f"Question: {value["question"]}")
-                    print(f"Original Question: {value["original_question"]}")
-                    context = (value["context"][:100] + "...") if value["context"] else ""
-                    print(f"Context: {context}")
-                    print(f"Reranking score: {value["reranking_score"]}")
-                    chunks = (str(value["chunks"])[:100] + "...]") if value["chunks"] else value["chunks"]
-                    print(f"Chunks: {chunks}")
+            if verbosity > 0:
+                last_msg.pretty_print()
+                if verbosity > 1:
+                    if last_msg.type != "tool":
+                        print(f"\n{'-'*36} STATE {'-'*37}")
+                        print(f"Question: {value["question"]}")
+                        print(f"Original Question: {value["original_question"]}")
+                        context = (value["context"][:100] + "...") if value["context"] else ""
+                        print(f"Context: {context}")
+                        print(f"Reranking score: {value["reranking_score"]}")
+                        chunks = (str(value["chunks"])[:100] + "...]") if value["chunks"] else value["chunks"]
+                        print(f"Chunks: {chunks}")
+                        print(f"{'-'*80}")
+    
+    print(f"\n{'-'*36} Answer {'-'*36}\n{last_msg.content}")

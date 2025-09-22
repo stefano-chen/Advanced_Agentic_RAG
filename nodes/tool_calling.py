@@ -1,10 +1,9 @@
 from langchain_core.language_models.chat_models import BaseChatModel
 from typing import List, Callable, Union, Literal
 from langchain_core.tools import BaseTool
-from langgraph.graph import MessagesState
 from langchain.prompts import PromptTemplate
 from utils.state import AgentState
-from langchain_core.messages import AnyMessage
+from langchain_core.messages import AnyMessage, AIMessage
 
 class Choice:
     def __init__(self, llm: BaseChatModel, prompt: str):
@@ -40,6 +39,8 @@ class ToolCalling:
             prompt = PromptTemplate.from_template(self._prompt).invoke({"query": state["question"]})
             response = self._llm.invoke(prompt)
             state["messages"].append(response)
+        else: 
+            state["messages"].append(AIMessage("No tools to call, routing to the generate answer node"))
         return state
 
 

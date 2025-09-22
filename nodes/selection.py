@@ -49,7 +49,7 @@ class ChunckSelection:
             else:
                 raise NotImplementedError(f"selection strategy {strategy} not supported")
         
-        state["messages"].append(AIMessage(f"{len(chunks)} selected"))
+        state["messages"].append(AIMessage(f"{len(chunks)} chunks selected"))
         state["chunks"] = chunks
         state["reranking_score"] = None
 

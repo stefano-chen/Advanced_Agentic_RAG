@@ -25,10 +25,11 @@ if __name__ == "__main__":
 
     agent = build_agent(app_config, prompts)
 
+    verbosity = app_config.get("verbosity", 0)
     save_to_png_flag = app_config.get("save_to_png", False)
     image_name = app_config.get("image_name", "graph.png")
     if save_to_png_flag:
         save_to_png(agent, image_name)
 
     user_query = input("Enter: ")
-    stream_response(agent, user_query)
+    stream_response(agent, user_query, verbosity)

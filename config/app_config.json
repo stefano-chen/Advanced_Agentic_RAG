@@ -1,9 +1,10 @@
 {
+    "verbosity": 0,
     "db_dir_path": "./store",
     "vector_db": "faiss",
     "check_input_validity": true,
     "advanced_rag": true,
-    "save_to_png": true,
+    "save_to_png": false,
     "image_name": "graph.png",
     "llm": {
         "llm_provider": "lm-studio",
