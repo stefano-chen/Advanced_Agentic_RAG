@@ -12,8 +12,10 @@ class Chunking:
         if self.chunking_strategy.lower() == "window":
             self.text_splitter = RecursiveCharacterTextSplitter(**chunking_options)
         elif self.chunking_strategy.lower() == "sentence":
+            # Split on . ? !
             self.text_splitter = CharacterTextSplitter(separator=r'(?<=[.!?])\s+', is_separator_regex=True, **chunking_options)
         elif self.chunking_strategy.lower() == "paragraph":
+            # Simple paragraph split
             self.text_splitter = CharacterTextSplitter(separator="\n\n", **chunking_options)
         elif self.chunking_strategy.lower() == "semantic":
             if embedding_model:
@@ -21,7 +23,7 @@ class Chunking:
             else:
                 raise Exception("embedding model is required when using semantic chunking")
         else:
-            raise Exception(f"Chunking strategy {self.chunking_strategy} not supported")
+            raise NotImplementedError(f"Chunking strategy {self.chunking_strategy} not supported")
         
     def apply(self, documents: List[Document]):
         return self.text_splitter.split_documents(documents=documents)

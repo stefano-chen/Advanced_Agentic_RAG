@@ -13,6 +13,8 @@ class VectorStore:
         self.store_type = store_type
         self.save_dir_path = save_dir_path
         self.embedding_model = embedding_model
+
+        # Use the chosen vector store type
         if self.store_type == "faiss":
             self.vectorstore = FAISS(
                 embedding_function=self.embedding_model,    
@@ -26,15 +28,17 @@ class VectorStore:
                 persist_directory=self.save_dir_path
             )
         else:
-            raise Exception(f"Vector store {self.store_type} is not supported")
+            raise NotImplementedError(f"Vector store {self.store_type} is not supported")
     
     def as_retriever(self, k: int):
         return self.vectorstore.as_retriever(search_kwargs={"k": k})
 
     def add_documents(self, documents: List[Document]):
+        if not documents:
+            raise ValueError("None value found")
         return self.vectorstore.add_documents(documents=documents)
     
-    def load(self,):
+    def load(self):
         dir = Path(self.save_dir_path)
         if not dir.exists():
             raise FileNotFoundError(f"Directory {dir} not found")
