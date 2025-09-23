@@ -14,10 +14,6 @@ A demo project showcasing *Advanced Agentic Retrieval-Augmented Generation (RAG)
 - [Architecture](#architecture)  
 - [Quick Start](#quick-start)  
 - [Folder Structure](#folder-structure)  
-- [Configuration](#configuration)  
-- [Usage](#usage)  
-- [Contributing](#contributing)  
-- [License](#license)
 
 ---
 
