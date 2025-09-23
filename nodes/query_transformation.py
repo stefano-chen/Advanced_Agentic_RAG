@@ -6,8 +6,20 @@ from langchain_core.messages import AIMessage
 from typing import Dict, Any
 
 class QueryTransform:
-
-    def __init__(self, strategy: str, options: Dict[str, Dict[str, Any]], llm: BaseChatModel, prompts: dict[str, str]):
+    """
+    The Query Transformation Node
+    """
+    def __init__(self, strategy: str, options: Dict[str, Dict[str, Any]], llm: BaseChatModel, prompts: Dict[str, str]):
+        """
+        Attributes:
+            stategy (str): the name of a query transformation technique (e.g. step-back, hyde, etc.)
+            options: (Dict[str, Dict[str, Any]]): a dictionary that for each technique, contains the respective parameters
+            llm (BaseChatModel): the LLM for this node
+            options: (Dict[str, str]): a dictionary that for each technique, contains the respective prompt
+        
+        Raises:
+            NotImplementedError: if the provided strategy is not supported
+        """
         self._llm = llm
 
         if strategy == "step-back":
@@ -27,6 +39,15 @@ class QueryTransform:
 
     
     def transform(self, state: AgentState) -> AgentState:
+        """
+        This method define the query transformation process
+
+        Parameters:
+            state (AgentState): the graph state
+
+        Returns:
+            AgentState: the updated graph state
+        """
         if not self._prompt:
             raise Exception("Query transformation prompt not Found")
         

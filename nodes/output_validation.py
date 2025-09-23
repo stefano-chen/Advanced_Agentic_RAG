@@ -3,12 +3,28 @@ from utils.state import AgentState
 from langchain.prompts import PromptTemplate
 
 class AnswerValidation:
-
+    """
+    The Answer Validation Node
+    """
     def __init__(self, llm: BaseChatModel, prompt: str):
+        """
+        Attributes:
+            llm (BaseChatModel): the LLM for answer validation
+            prompt (str): the prompt used by the LLM
+        """
         self._llm = llm
         self._prompt = prompt
 
     def validate(self, state: AgentState) -> AgentState:
+        """
+        This method define the answer validation process (a.k.a. check for hallucinations)
+
+        Parameters:
+            state (AgentState): the graph state
+
+        Returns:
+            AgentState: the updated graph state
+        """
         question = state['original_question']
         context = state['context']
         answer = state['messages'][-1].content

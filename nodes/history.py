@@ -6,13 +6,28 @@ from langchain_core.messages import AIMessage, HumanMessage
 
 
 class HistorySummarizer:
-
+    """
+    The Chat History Summarizer Node
+    """
     def __init__(self, llm: BaseChatModel, prompt: str):
+        """
+        Attributes:
+            llm (BaseChatModel): the LLM for chat history summarization
+            prompt (str): the prompt used by the LLM
+        """
         self._llm = llm
         self._prompt = prompt
 
     def summarize(self, state: AgentState) -> AgentState:
-        
+        """
+        This method define the chat history summarization process
+
+        Parameters:
+            state (AgentState): the graph state
+
+        Returns:
+            AgentState: the updated graph state
+        """
         question = state["original_question"]
         history = state["history"]
 

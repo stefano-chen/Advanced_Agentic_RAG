@@ -1,8 +1,16 @@
 from utils.state import AgentState
 from langchain_core.messages import AIMessage
 
-def update_context(state: AgentState):
+def update_context(state: AgentState) -> AgentState:
+    """
+    This method define the context update process
 
+    Parameters:
+        state (AgentState): the graph state
+
+    Returns:
+        AgentState: the updated graph state
+    """
     new_context = ""
 
     message = None

@@ -1,16 +1,30 @@
-
 from utils.state import AgentState
 from langchain_core.language_models.chat_models import BaseChatModel
 from langchain.prompts import PromptTemplate
-from langchain_core.messages import AIMessage
 
 class GenerateAnswer:
-
+    """
+    The Answer Generation Node
+    """
     def __init__(self, llm: BaseChatModel, prompt: str):
+        """
+        Attributes:
+            llm (BaseChatModel): the LLM tasked with the answer generation
+            prompt (str): the prompt used for the answer generation
+        """
         self._prompt = prompt
         self._llm = llm
 
     def generate_answer(self, state: AgentState) -> AgentState:
+        """
+        This method define the answering process
+
+        Parameters:
+            state (AgentState): the graph state
+
+        Returns:
+            AgentState: the updated graph state
+        """
         question = state["original_question"]
         context = state["context"]
         prompt = PromptTemplate.from_template(self._prompt).invoke({"question": question, "context": context})
