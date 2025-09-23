@@ -20,7 +20,7 @@ class HistorySummarizer:
 
     def summarize(self, state: AgentState) -> AgentState:
         """
-        This method define the chat history summarization process
+        Use the chat history to write a user's query contextualize with the chat history
 
         Parameters:
             state (AgentState): the graph state

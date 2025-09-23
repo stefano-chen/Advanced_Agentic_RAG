@@ -3,7 +3,7 @@ from langchain_core.messages import AIMessage
 
 def update_context(state: AgentState) -> AgentState:
     """
-    This method define the context update process
+    Merge chunks into a single context string
 
     Parameters:
         state (AgentState): the graph state

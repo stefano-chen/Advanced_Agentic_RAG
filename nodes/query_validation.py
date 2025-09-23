@@ -21,7 +21,7 @@ class QueryValidation:
 
     def validate(self, state: AgentState) -> AgentState:
         """
-        This method define the user's query validation process
+        Checks if the user's query is related to provided topics
 
         Parameters:
             state (AgentState): the graph state

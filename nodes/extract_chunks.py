@@ -3,7 +3,7 @@ from langchain_core.messages import AIMessage
 
 def extract_chunks(state: AgentState) -> AgentState:
     """
-    This method define the chunks extration process
+    Extract chunks from the previous message
 
     Parameters:
         state (AgentState): the graph state

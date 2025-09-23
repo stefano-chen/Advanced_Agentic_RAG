@@ -17,7 +17,7 @@ class GenerateAnswer:
 
     def generate_answer(self, state: AgentState) -> AgentState:
         """
-        This method define the answering process
+        Use the original question and the context to generate a answer
 
         Parameters:
             state (AgentState): the graph state

@@ -2,7 +2,7 @@ from langgraph.graph import StateGraph, START, END
 from langgraph.graph.state import CompiledStateGraph
 from langgraph.prebuilt import ToolNode
 from nodes.query_validation import QueryValidation, is_related
-from nodes.tool_calling import ToolCalling, tool_condition
+from nodes.tool_calling import ToolRouting, tool_condition
 from utils.state import AgentState
 from nodes.query_transformation import QueryTransform
 from utils.processing import get_topics
@@ -50,7 +50,7 @@ def build_agent(app_config: Dict[str, Any], prompts: Dict[str, Union[str, Dict[s
     # Simple RAG Nodes
     graph.add_node("history_integration", HistorySummarizer(llm, prompts["history"]).summarize)
     graph.add_node("retrieve_or_respond", Choice(llm, prompts["retrieve_respond"]).choose)
-    graph.add_node("tool_routing", ToolCalling(llm, prompts["tool_calling"], tools).call)
+    graph.add_node("tool_routing", ToolRouting(llm, prompts["tool_calling"], tools).route)
     graph.add_node("tool_execution", ToolNode(tools))
     graph.add_node("extract_chunks", extract_chunks)
     graph.add_node("update_context", update_context)

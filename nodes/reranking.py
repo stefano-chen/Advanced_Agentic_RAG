@@ -87,7 +87,7 @@ class Reranking:
 
     def rerank(self, state: AgentState) -> AgentState:
         """
-        This method define the reranking process
+        Calculate the weighted average chunk's score 
 
         Parameters:
             state (AgentState): the graph state

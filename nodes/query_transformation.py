@@ -40,7 +40,7 @@ class QueryTransform:
     
     def transform(self, state: AgentState) -> AgentState:
         """
-        This method define the query transformation process
+        Rewrite the user's query using query transformation technique
 
         Parameters:
             state (AgentState): the graph state

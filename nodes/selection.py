@@ -67,7 +67,7 @@ class ChunckSelection:
 
     def select(self, state: AgentState) -> AgentState:
         """
-        This method define the reranking process
+        Use the selection techniques to select chunks
 
         Parameters:
             state (AgentState): the graph state

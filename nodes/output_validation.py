@@ -17,7 +17,7 @@ class AnswerValidation:
 
     def validate(self, state: AgentState) -> AgentState:
         """
-        This method define the answer validation process (a.k.a. check for hallucinations)
+        check for hallucinations in the previous message
 
         Parameters:
             state (AgentState): the graph state
