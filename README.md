@@ -41,6 +41,12 @@ Here’s a high-level view of how things are structured:
 2. **Agent orchestration** using LangGraph — defining workflows or agent pipelines.  
 3. **Retrieval + Generation** — given a user prompt, retrieve relevant passages & generate responses.  
 
+### Simple Agentic RAG
+![simple](graph_simple.png)
+
+### Advanced Agentic RAG
+![advanced](graph_advance.png)
+
 ---
 
 ## Quick Start
