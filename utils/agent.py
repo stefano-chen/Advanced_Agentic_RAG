@@ -1,4 +1,5 @@
-from langgraph.graph import StateGraph, START, END, MessagesState
+from langgraph.graph import StateGraph, START, END
+from langgraph.graph.state import CompiledStateGraph
 from langgraph.prebuilt import ToolNode
 from nodes.query_validation import QueryValidation, is_related
 from nodes.tool_calling import ToolCalling, tool_condition
@@ -15,19 +16,35 @@ from nodes.selection import ChunckSelection
 from nodes.tool_calling import Choice
 from nodes.extract_chunks import extract_chunks
 from nodes.history import HistorySummarizer
+from typing import Dict, Any, Union
 
-def build_agent(app_config, prompts):
+def build_agent(app_config: Dict[str, Any], prompts: Dict[str, Union[str, Dict[str, str]]]) -> CompiledStateGraph[AgentState]:
+    """
+    Build the Agentic RAG system, based on the configuration file and prompts file
 
+    Parameters:
+        app_config (Dict[str, Any]): the configuration file containing the building parameters
+        prompts: (Dict[str, Union[str, Dict[str, str]]]): the file containing the prompts used by the AI agent
+    
+    Returns:
+        CompiledStateGraph[AgentState]: An compiled graph (a.k.a Agent) using the **AgentState** state
+    """
+
+    # Read some flags or using default values
     check_output_validity_flag = app_config.get("check_output_validity", True)
     check_input_validity_flag = app_config.get("check_input_validity", True)
     advanced_rag_flag = app_config.get("advanced_rag", True)
 
+    # Fetch the RAG topics
     topics = get_topics(app_config["db_dir_path"])
 
+    # Fetch the Agent's tools
     tools = get_tools(app_config["vector_db"], app_config["db_dir_path"], app_config["k"], app_config["embedding"])
 
+    # Instantiate 
     llm = LLMModel(app_config["llm"]).get()
 
+    # Use AgentState class as graph's state
     graph = StateGraph(AgentState)
     
     # Simple RAG Nodes
@@ -63,8 +80,8 @@ def build_agent(app_config, prompts):
     graph.add_edge("tool_execution", "extract_chunks")
     graph.add_edge("update_context", "retrieve_or_respond")
 
+    # Advanced RAG Edge
     if advanced_rag_flag:
-        # Advanced RAG Edge
         if check_input_validity_flag:
             graph.add_edge("history_integration", "validate_input")
             graph.add_conditional_edges(
@@ -92,5 +109,5 @@ def build_agent(app_config, prompts):
         graph.add_edge("generate_answer", END)
         graph.add_edge("extract_chunks", "update_context")
 
-    # return the compiled graph
+    # return the compiled graph (a.k.a. the AI agent)
     return graph.compile()
