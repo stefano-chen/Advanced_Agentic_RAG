@@ -5,7 +5,7 @@
     "check_input_validity": true,
     "advanced_rag": true,
     "save_to_png": false,
-    "image_name": "graph.png",
+    "image_name": "graph_advanced.png",
     "llm": {
         "llm_provider": "lm-studio",
         "llm_model": "google/gemma-2-9b",
