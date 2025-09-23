@@ -9,8 +9,10 @@ import time
 
 if __name__ == "__main__":
 
+    # Load environment variables from .env file
     load_dotenv("./.env")
 
+    # Check configuration files existence
     if not Path("./config/app_config.json").exists():
         raise FileNotFoundError("app_config.json not Found")
     
@@ -23,16 +25,21 @@ if __name__ == "__main__":
     with open("./config/prompts.json") as f:
         prompts = json.load(f)
 
+    # Create a In memory chat history
     chat_history = InMemoryChatMessageHistory()
     
+    # Compile the graph to an agent
     start = time.time()
     agent = build_agent(app_config, prompts)
     end = time.time()
     print(f"Agent compiled in {(end - start):.2f}s")
 
+    # read some flags from config file
     verbosity = app_config.get("verbosity", 0)
     save_to_png_flag = app_config.get("save_to_png", False)
     image_name = app_config.get("image_name", "graph.png")
+
+    # create a png representation of the agent/graph
     if save_to_png_flag:
         save_to_png(agent, image_name)
 
